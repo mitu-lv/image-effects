@@ -26,10 +26,10 @@ function receiveMessage(event) {
     const image = event.data.image;
     if (image) {
         if (image.startsWith("http")) {
-            ImageEffects.setInputImageUrl(image);
+            ImageEffects.setInputImageUrl(image, event.data.size);
             return;
         }
-        ImageEffects.setInputImage(image);
+        ImageEffects.setInputImage(image, event.data.size);
         return;
     }
 
