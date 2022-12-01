@@ -47,13 +47,22 @@ export function App() {
     const [image, setImageData] = useState({dataUrl: null, width: 0, height: 0});
 
 
-    function setInputImage(image) {
-        setImageData(imageToDataUrl(image));
+    function setInputImage(image, {width, height}) {
+        const imageData = imageToDataUrl(image);
+        setImageData({
+            dataUrl: imageData.dataUrl,
+            width: width || imageData.width,
+            height: height || imageData.height
+        });
     }
 
-    async function setInputImageUrl(url) {
+    async function setInputImageUrl(url, {width, height}) {
         const image = await imageUrlToDataUrl(url);
-        setImageData(image);
+        setImageData({
+            dataUrl: image.dataUrl,
+            width: width || image.width,
+            height: height || image.height
+        });
     }
 
     useEffect(() => {
