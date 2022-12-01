@@ -1,0 +1,39 @@
+.imageBlock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.svgBlock {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.vignetteContainer, .imageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.fixCropNotVisibleOnIE {
+    /**
+     * Needed for IE to display crop mask
+     * But it crops the masks, if they are rotated
+    */
+    overflow: hidden;
+}
+
+.fixDeselectJump {
+    /**
+     * Fix crop mask jumps on deselect bug
+     * N.B. Not needed and do not apply on Safari 11 - causes issues!
+     */
+    transform: translateZ(0);
+}

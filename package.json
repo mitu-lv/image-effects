@@ -1,0 +1,41 @@
+{
+  "name": "image-effects",
+  "version": "1.0.0",
+  "description": "Add effects to images",
+  "main": "colors.js",
+  "scripts": {
+    "build": "esbuild --loader:.js=jsx --bundle src/index.jsx --outfile=build/app.js && cp src/index.html build",
+    "dev": "esbuild --loader:.js=jsx --bundle src/index.jsx --outfile=build/app.js --watch",
+    "run": "python3 -m http.server --directory build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "npm run build && gh-pages -d build -b master -e image-effects -r git@github.com:mitu-lv/mitu-lv.github.io.git -m \"Deploy image effects\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mitu-lv/image-effects.git"
+  },
+  "keywords": [
+    "image",
+    "image filters"
+  ],
+  "author": "Mikus Lacarus",
+  "license": "MIT",
+  "dependencies": {
+    "bowser": "2.10.0",
+    "classnames": "2.2.6",
+    "d3-color": "3.1.0",
+    "i18next": "17.0.7",
+    "immutable": "3.8.2",
+    "memoizee": "0.4.14",
+    "prop-types": "15.5.10",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-immutable-proptypes": "2.1.0",
+    "styled-components": "5.2.1",
+    "uuid": "3.3.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.14.54",
+    "gh-pages": "4.0.0"
+  }
+}
