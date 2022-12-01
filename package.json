@@ -2,7 +2,7 @@
   "name": "image-effects",
   "version": "1.0.0",
   "description": "Add effects to images",
-  "main": "colors.js",
+  "main": "app.js",
   "scripts": {
     "build": "esbuild --loader:.js=jsx --bundle src/index.jsx --outfile=build/app.js && cp src/index.html build",
     "dev": "esbuild --loader:.js=jsx --bundle src/index.jsx --outfile=build/app.js --watch",

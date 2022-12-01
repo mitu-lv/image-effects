@@ -9,8 +9,7 @@ function svgToDataUrl(svg) {
     return `data:image/svg+xml;base64,${btoa(new XMLSerializer().serializeToString(svg))}`;
 }
 
-async function imageUrlToDataUrl(url) {
-    const image = await loadImage(url, url);
+function imageToDataUrl(image) {
     const canvas = document.createElement('canvas');
     canvas.width = image.width;
     canvas.height = image.height;
@@ -19,6 +18,10 @@ async function imageUrlToDataUrl(url) {
     return { dataUrl: canvas.toDataURL('image/png', 1.0), width: image.width, height: image.height };
 }
 
+async function imageUrlToDataUrl(url) {
+    const image = await loadImage(url, true);
+    return imageToDataUrl(image);
+}
 
 async function getOutputImage() {
         const svgElement = document.getElementsByClassName("svgBlock")[0];
@@ -40,19 +43,24 @@ function exposeApi(api) {
 
 
 export function App() {
-    const [props, setProps] = useState({});
+    const [props, setEffects] = useState({});
     const [image, setImageData] = useState({dataUrl: null, width: 0, height: 0});
 
 
-    async function setInputImage(url) {
+    function setInputImage(image) {
+        setImageData(imageToDataUrl(image));
+    }
+
+    async function setInputImageUrl(url) {
         const image = await imageUrlToDataUrl(url);
         setImageData(image);
     }
 
     useEffect(() => {
         exposeApi({
-            setEffects: setProps,
+            setEffects: setEffects,
             setInputImage: setInputImage,
+            setInputImageUrl: setInputImageUrl,
             getOutputImage: getOutputImage,
         });
     }, []);
