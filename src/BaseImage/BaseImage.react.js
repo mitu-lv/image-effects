@@ -266,12 +266,12 @@ export default class BaseImage extends PureComponent {
         } else {
             if (sizeWidth < sizeHeight) {
                 const o = (sizeHeight - sizeWidth) * relativeV(rounded) / 2;
-                y = o;
+                y = o/2;
                 height = sizeHeight - o;
             } else {
                 height = minDim;
                 const o = (sizeWidth - sizeHeight) * relativeV(rounded) / 2;
-                x = o
+                x = o/2
                 width = sizeWidth - o;
             }
         }
