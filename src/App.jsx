@@ -4,6 +4,29 @@ import {fromJS} from 'immutable';
 import './App.css';
 import loadImage from './loadImage';
 
+const presetDefaults = {
+    blackAndWhite: 1,
+    hdr: 0.5,
+    riga: 0.5,
+    seventies: 0.5,
+    sanfrancisco: 0.5,
+    bronze: 0.5,
+    budapest: 0.5,
+    vintage: 0.5
+};
+
+function enablePreset(preset) {
+    if (Object.keys(presetDefaults).includes(preset)) {
+        ImageEffects.setEffects({
+            filters: {
+                [preset]: presetDefaults[preset]
+            }
+        });
+    }
+}
+
+window.enablePreset = enablePreset;
+
 function runTest() {
     ImageEffects.setInputImageUrl("https://graphics.jifo.co/base/images/thumb/run_th.jpg");
     ImageEffects.setEffects({
@@ -15,6 +38,7 @@ function runTest() {
             hueRotate: 0.5,
             vignette: 0.5,
             rounded: 0.5,
+            hdr: 0.5
         }
     });
 }

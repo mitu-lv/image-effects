@@ -417,12 +417,7 @@ export default class BaseImage extends PureComponent {
                         scaleY={this.props.scaleY}
                     />
                 )} */}
-                {this.useSvgFallback()
-                    ? this.renderSVG()
-                    : this.state.vignette
-                        ? this.renderImageWithVignette()
-                        : this.renderImage()
-                }
+                {this.renderSVG()}
             </BaseImageContainer>
         );
     }
