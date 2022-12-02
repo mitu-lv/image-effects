@@ -14,7 +14,7 @@ const root = ReactDOM.render(<Entry />, document.getElementById('root'));
 function receiveMessage(event) {
     const close = event.data.close;
     if (close) {
-        ImageEffects.getImageOutput().then((image) => {
+        ImageEffects.getOutputImage().then((image) => {
             window.parent.postMessage({
                 kind: "ImageEffectsResult",
                 image: image.src
