@@ -59,6 +59,12 @@ const cachedNothing = Object.freeze({
 
 const noop = () => {};
 
+function relativeV(value) {
+    const min = 0.1;
+    const max = 0.3;
+    return (value - min) / (max - min);
+  }
+
 function getVignetteRect({width, height, clip}) {
     if (!clip) {
         return {left: 0, top: 0, width, height};
@@ -156,7 +162,9 @@ export default class BaseImage extends PureComponent {
                  * before giving filters to provider
                  */
                 const vignette = amountOf(filters, 'vignette');
-                const svgFilters = filters.delete('vignette');
+                const rounded = amountOf(filters, 'rounded');
+                let svgFilters = filters.delete('vignette');
+                svgFilters = svgFilters.delete('rounded');
 
                 if (svgFilters.isEmpty()) {
                     return {
@@ -176,6 +184,8 @@ export default class BaseImage extends PureComponent {
                     vignette,
                     filter: `url(#${id})`,
                     svgFilters,
+                    isRounded: rounded > 0,
+                    rounded: filters.get('rounded'),
                 };
             }
             return cachedNothing;
@@ -236,6 +246,42 @@ export default class BaseImage extends PureComponent {
             filter={this.state.filter}
         />
 
+    calcRounded = () => {
+        const {width:sizeWidth, height: sizeHeight} = this.props;
+        const rounded = this.state.rounded / 2;
+        const minDim = Math.min(sizeWidth, sizeHeight);
+        let x = 0;
+        let y = 0;
+        let rx = minDim * rounded;
+        let width = sizeWidth;
+        let height = sizeHeight;
+
+        if (rounded < 0.1) {
+
+        } else if (rounded >= 0.3) {
+            x = (sizeWidth - minDim) / 2;
+            y = (sizeHeight - minDim) / 2;
+            width = minDim;
+            height = minDim;
+        } else {
+            if (sizeWidth < sizeHeight) {
+                const o = (sizeHeight - sizeWidth) * relativeV(rounded) / 2;
+                y = o;
+                height = sizeHeight - o;
+            } else {
+                height = minDim;
+                const o = (sizeWidth - sizeHeight) * relativeV(rounded) / 2;
+                x = o
+                width = sizeWidth - o;
+            }
+        }
+        return (
+            <mask id={`${this.state.id}-mask`}>
+                <rect x={x} y={y} rx={rx} width={width} height={height} fill="white"/>
+            </mask>
+        );
+    }
+
     renderSVGImageWithVignette = () => {
         const {src, width, height} = this.props;
         const {vignette, filter, svgFilters} = this.state;
@@ -259,6 +305,7 @@ export default class BaseImage extends PureComponent {
                     >
                         {svgFilters.entrySeq().sort(filterSequence).map(this.definition)}
                     </filter>)}
+                    {this.state.isRounded && this.calcRounded()}
                     {/*
                         Render gradient dynamically on the fly in the clip area.
                         Note: moving around static gradient resulted in weird
@@ -282,6 +329,7 @@ export default class BaseImage extends PureComponent {
                         width={width}
                         height={height}
                         filter={filter}
+                        mask={this.state.isRounded ? `url(#${this.state.id}-mask)` : undefined}
                     />
                     {vignette && (<rect
                         x="0"
@@ -290,6 +338,7 @@ export default class BaseImage extends PureComponent {
                         height={height}
                         style={{opacity: vignette}}
                         fill={`url(#${vignetteId})`}
+                        mask={this.state.isRounded ? `url(#${this.state.id}-mask)` : undefined}
                     />)}
                 </g>
             </>

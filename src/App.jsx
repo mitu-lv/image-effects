@@ -4,6 +4,20 @@ import {fromJS} from 'immutable';
 import './App.css';
 import loadImage from './loadImage';
 
+function runTest() {
+    ImageEffects.setInputImageUrl("https://graphics.jifo.co/base/images/thumb/run_th.jpg");
+    ImageEffects.setEffects({
+        filters: {
+            blur: 0.5,
+            brightness: 0.5,
+            contrast: 0.5,
+            saturation: 0.5,
+            hueRotate: 0.5,
+            vignette: 0.5,
+            rounded: 0.5,
+        }
+    });
+}
 
 function svgToDataUrl(svg) {
     return `data:image/svg+xml;base64,${btoa(new XMLSerializer().serializeToString(svg))}`;
@@ -47,21 +61,21 @@ export function App() {
     const [image, setImageData] = useState({dataUrl: null, width: 0, height: 0});
 
 
-    function setInputImage(image, {width, height}) {
+    function setInputImage(image, size) {
         const imageData = imageToDataUrl(image);
         setImageData({
             dataUrl: imageData.dataUrl,
-            width: width || imageData.width,
-            height: height || imageData.height
+            width: size?.width || imageData.width,
+            height: size?.height || imageData.height
         });
     }
 
-    async function setInputImageUrl(url, {width, height}) {
+    async function setInputImageUrl(url, size) {
         const image = await imageUrlToDataUrl(url);
         setImageData({
             dataUrl: image.dataUrl,
-            width: width || image.width,
-            height: height || image.height
+            width: size?.width || image.width,
+            height: size?.height || image.height
         });
     }
 
